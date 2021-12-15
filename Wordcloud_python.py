@@ -48,14 +48,17 @@ data_Token.to_excel('data_seg.xlsx', index=False, encoding='utf_8_sig')
 # 製作文字雲
 text = Counter(data_Token['words'])
 
+# 篩選字數
 
-def filter_n(data, min_n: int):
+
+def filter_n(data, min_n=5):
     return {k: v for k, v in data.items() if v >= min_n}
 
 
-text = filter_n(text, 5)
+text = filter_n(text, 5)  # 輸入字數最低頻率
 
-wc = WordCloud(font_path=font).generate_from_frequencies(text)
+font = 'cwTeXQYuan-Medium.ttf'
+wc = WordCloud(font_path=font).generate_from_frequencies(text)  # 產出文字雲
 
 
 plt.imshow(wc)
