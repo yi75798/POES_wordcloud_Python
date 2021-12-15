@@ -45,17 +45,30 @@ for i in df.index:
 # 輸出檔案
 data_Token.to_excel('data_seg.xlsx', index=False, encoding='utf_8_sig')
 
+# 計算詞頻
+# 不分組
+data_Token['n'] = 0
+for i in data_Token.index:
+    data_Token['n'].loc[i] = Counter(data_Token['words'])[
+        data_Token['words'].loc[i]]
+data_Token = data_Token.drop_duplicates(subset=['words'])
+
+
 # 製作文字雲
 text = Counter(data_Token['words'])
 
 # 篩選字數
+# def filter_n(data, min_n=5):
+#     return {k: v for k, v in data.items() if v >= min_n}
 
+
+# text = filter_n(text, 5)  # 輸入字數最低頻率
 
 def filter_n(data, min_n=5):
-    return {k: v for k, v in data.items() if v >= min_n}
+    return {k: v for k, v in zip(data['words'], data['n']) if v >= min_n}
 
 
-text = filter_n(text, 5)  # 輸入字數最低頻率
+text = filter_n(data_Token, 5)  # 輸入字數最低頻率
 
 font = 'cwTeXQYuan-Medium.ttf'
 wc = WordCloud(font_path=font).generate_from_frequencies(text)  # 產出文字雲
